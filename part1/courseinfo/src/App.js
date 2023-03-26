@@ -3,7 +3,13 @@ const Header = (props) => {
     <h1>{props.course}</h1>
   )
 };
-
+const Part = (props) => {
+  return(
+    <p>
+        {props.part} {props.exercises}
+    </p>
+  )
+}
 const Content = (props) => {
   const {part1, exercises1, part2, exercises2, part3, exercises3} = props
   return (
