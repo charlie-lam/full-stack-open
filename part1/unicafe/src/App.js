@@ -1,5 +1,17 @@
 import { useState } from 'react'
 
+const Button = ({onClick, text}) => {
+  return(
+    <button onClick={onClick}>text</button>
+  )
+}
+
+const StatisticLine = ({value, text}) => {
+  return(
+    <p>text {value}</p>
+  )
+}
+
 const Statistics = ({good, bad, neutral}) => {
 
   let all = good + bad + neutral
@@ -19,7 +31,6 @@ const Statistics = ({good, bad, neutral}) => {
           <p>positive {positive}%</p>
         </>
       }
-      
     </>
   )
 }
