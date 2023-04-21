@@ -6,3 +6,11 @@ export const getAll = () => {
   return response.then(res => res.data)
 }
 
+export const create = (person) => {
+  const response = axios.post(baseUrl, person)
+  return response.then(res => res.data)
+}
+
+export const deletePerson = (id) => {
+  return axios.delete(`${baseUrl}/${id}`)
+}

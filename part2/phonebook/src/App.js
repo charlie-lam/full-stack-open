@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { Persons } from './Persons'
 import { Filter } from './Filter'
 import { PersonForm } from './PersonForm'
-import axios from 'axios'
-import { getAll } from './services/persons'
+import { create, deletePerson, getAll } from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -15,6 +14,9 @@ const App = () => {
     getAll()
       .then(persons => {
         setPersons(persons)
+      })
+      .catch(error => {
+        console.log('fail')
       })
   }, [])
 
@@ -42,9 +44,22 @@ const App = () => {
       const newPerson = {name: newName, number: newNumber}
       setNewName('')
       setNewNumber('')
-      axios
-        .post('http://localhost:3001/persons', newPerson)
-        .then(response => setPersons([...persons, response.data]))
+      create(newPerson)
+        .then(person => setPersons([...persons, person]))
+        .catch(error => {
+          console.log('fail')
+        })
+    }
+  }
+
+  const handleDelete = (person) => {
+    if(window.confirm(`Delete ${person.name}?`)){
+      deletePerson(person.id)
+        .then(res => console.log(`${person.name} deleted`))
+        .catch(error => {
+          console.log('fail')
+        })
+      setPersons(persons.filter(e => e.id !== person.id))
     }
   }
 
@@ -61,7 +76,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h3>Numbers</h3>
-      <Persons shown={shown} />
+      <Persons shown={shown} handleDelete={handleDelete} />
     </div>
   )
 }
