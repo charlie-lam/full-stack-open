@@ -3,12 +3,14 @@ import { Persons } from './Persons'
 import { Filter } from './Filter'
 import { PersonForm } from './PersonForm'
 import { create, deletePerson, getAll, update } from './services/persons'
+import { SuccessAlert } from './SuccessAlert'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     getAll()
@@ -46,6 +48,10 @@ const App = () => {
           .catch(error => {
             console.log('fail')
           })
+          setSuccessMessage(`Updated ${foundPerson.name}`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
       }
     }
     else {
@@ -56,6 +62,10 @@ const App = () => {
         .catch(error => {
           console.log('fail')
         })
+      setSuccessMessage(`Added ${newPerson.name}`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     }
   }
 
@@ -73,6 +83,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessAlert message={successMessage} />
       <Filter  handleFilterChange={handleFilterChange} newFilter={newFilter}/>
       <h3>Add a new</h3>
       <PersonForm 
