@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Persons } from './Persons'
 import { Filter } from './Filter'
 import { PersonForm } from './PersonForm'
-import { create, deletePerson, getAll } from './services/persons'
+import { create, deletePerson, getAll, update } from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -36,12 +36,19 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    const newPerson = {name: newName, number: newNumber}
     
     if(persons.some(person => person.name === newName)){
-      alert(`${newName} is already added to phonebook`)
+      if(window.confirm(`${newName} is already in the phonebook, would you like to update the number?`)){
+        const foundPerson = persons.find(person => person.name === newName)
+        update({...foundPerson, number:newNumber})
+          .then(person => setPersons(persons.map(p => p.id === person.id ? person : p)))
+          .catch(error => {
+            console.log('fail')
+          })
+      }
     }
     else {
-      const newPerson = {name: newName, number: newNumber}
       setNewName('')
       setNewNumber('')
       create(newPerson)
